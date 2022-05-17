@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <style>
+      ul {
+        margin-bottom: 100px;
+      }
+      li {
+        list-style: none;
+      }
+  
+      img {
+        width: 200px;
+        height: 200px;
+      }
+  
+      .real-upload {
+        display: none;
+      }
+  
+      .upload {
+        width: 200px;
+        height: 200px;
+        background-color: antiquewhite;
+      }
+  
+      .image-preview {
+        width: 1300px;
+        height: 200px;
+        background-color: #fff6f6;
+        gap: 20px;
+      }
+      .enroll_button {
+        height: 3.5rem;
+        width: 10rem;
+        color: rgb(255, 255, 255);
+        font-size: 20px;
+        font-weight: 700;
+        border-radius: 2px;
+        background: rgb(255, 80, 88);
+        position: relative;
+        border: 0px;
+      }
+      footer {
+        width: 100%;
+        height: 5.5rem;
+        background: #fff6f6;
+        box-shadow: rgb(234 233 241) 0px -1px 0px 0px;
+        left: 0px;
+        bottom: 0px;
+        position: fixed;
+      }
+      #footer {
+        display: flex;
+        height: 100%;
+        -webkit-box-pack: end;
+        justify-content: flex-end;
+        -webkit-box-align: center;
+        align-items: center;
+        width: 1024px;
+        margin: auto;
+      }
+    </style>
+</head>
+<body>
+  <main>
+  <h2>기본정보</h2>
+  <ul class="product_enroll">
+    <li class="product_info">
+      <div class="category_info">동네 이름</div>
+      <div class="product_name"><input type="text" placeholder="상품 제목을 입력해주세요." class="product_box" value></div>
+  </li>
+    <li class="product_info">
+      <div class="category_info">상품 이미지</div>
+      <div class="image_enroll">이미지 등록<input type="file" class="real-upload" accept="image/*" required multiple></div>
+    </li>
+    <li class="image-preview">이미지 미리보기</li>
+    <li class="product_info">
+        <div class="category_info">제목</div>
+        <div class="product_name"><input type="text" placeholder="상품 제목을 입력해주세요." class="product_box" value></div>
+    </li>
+    <li class="product_info">
+        <div class="category_info">설명</div>
+        <div class="product_name"><input type="text" placeholder="상품 설명을 입력해주세요. (최소 10글자 이상)" class="description_box" value></div>
+    </li>
+    <li class="product_info">
+      <div class="category_info">가격</div>
+      <div class="product_name"><input type="text" placeholder="가격(원)" class="product_box" value></div>
+    </li>
+    <li class="product_info">
+      <div class="category_info">카테고리</div>
+      <select name="category">
+        <option value="">음식</option>
+        <option value="">가전제품</option>
+        <option value="">의류</option>
+      </select>
+    </li>
+
+  </ul>
+  <footer>
+    <div id = "footer">
+      <button type="button" class="enroll_button">등록</button>
+    </div>
+  </footer>
+</main>
+  <script>
+    function getImageFiles(e) { //이미지 파일 다루기
+      const uploadFiles = [];
+      const files = e.currentTarget.files;
+      const imagePreview = document.querySelector('.image-preview');
+      const docFrag = new DocumentFragment();
+
+      if ([...files].length >= 7) { //최대 이미지 업로드
+        alert('이미지는 최대 6개까지 업로드가 가능합니다.');
+        return;
+      }
+      // 파일 타입 검사
+      [...files].forEach(file => {
+        if (!file.type.match("image/.*")) {
+          alert('이미지 파일만 업로드가 가능합니다.');
+          return
+        }
+
+        // 파일 갯수 검사
+        if ([...files].length < 7) {
+          uploadFiles.push(file);
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            const preview = createElement(e, file);
+            imagePreview.appendChild(preview);
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+    }
+
+    function createElement(e, file) {
+      const li = document.createElement('li');
+      const img = document.createElement('img');
+      img.setAttribute('src', e.target.result);
+      img.setAttribute('data-file', file.name);
+      li.appendChild(img);
+
+      return li;
+    }
+    
+    const realUpload = document.querySelector('.real-upload');
+    const upload = document.querySelector('.image_enroll');
+
+    upload.addEventListener('click', () => realUpload.click());
+    realUpload.addEventListener('change', getImageFiles);
+  </script>
+  </script>
+</body>
+</html>
